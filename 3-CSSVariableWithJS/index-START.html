@@ -34,11 +34,7 @@
       <input id="base" type="color" name="base" value="#bada55" />
     </div>
 
-    <div id="imgDiv">
-      <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500" />
-
-      <div class="foreground"></div>
-    </div>
+    <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500" />
 
     <style>
       /* nearly as important as setting a rule on html */
@@ -61,7 +57,7 @@
         filter: blur(var(--blur));
         position: relative;
         z-index: 49;
-        width: 100vw;
+
         height: 20vh;
       }
 
@@ -111,9 +107,9 @@
 
       inputs.forEach(input => input.addEventListener("change", handleUpdate));
 
-      inputs.forEach(input => {
-        input.addEventListener("mousemove", handleUpdate);
-      });
+      inputs.forEach(input =>
+        input.addEventListener("mousemove", handleUpdate)
+      );
     </script>
   </body>
 </html>
