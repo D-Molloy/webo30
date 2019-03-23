@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML5 Canvas</title>
+  </head>
+  <body>
+    <canvas id="draw" width="800" height="800"></canvas>
+    <script>
+      const canvas = document.querySelector("#draw");
+      //You don't actually draw on the HTML, you draw on the context, which can be 2D or 3D (usualy games)
+      const ctx = canvas.getContext("2d");
+      //Size up the canvas to be the exact same size as the window
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      //the color of the lin
+      ctx.strokeStyle = "#bada55";
+      // when on line meets another line
+      ctx.lineJoin = "round";
+      // the end of the line
+      ctx.lineCap = "round";
+      //control 'brush' width
+      ctx.lineWidth = 20;
+      //same as blend in photoshop
+      // ctx.globalCompositeOperation = "multiply";
+
+      let isDrawing = false;
+      //where the line starts
+      let lastX = 0;
+      let lastY = 0;
+      let hue = 0;
+      let direction = true;
+
+      function draw(e) {
+        if (!isDrawing) return;
+        // will only draw when the mouse is down due to event listeners
+
+        ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+        //actually drawing
+        ctx.beginPath();
+        // startfrom
+        ctx.moveTo(lastX, lastY);
+        //go to
+        ctx.lineTo(e.offsetX, e.offsetY);
+        // wont see anything until stroke
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+        hue++;
+        if (hue >= 360) {
+          hue = 0;
+        }
+
+        if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+          direction = !direction;
+        }
+
+        direction ? ctx.lineWidth++ : ctx.lineWidth--;
+      }
+
+      canvas.addEventListener("mousedown", e => {
+        isDrawing = true;
+        // creates a new starting point before
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+      });
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", () => (isDrawing = false));
+      canvas.addEventListener("mouseout", () => (isDrawing = false));
+    </script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        border: 5px outset slateblue;
+      }
+    </style>
+  </body>
+</html>
