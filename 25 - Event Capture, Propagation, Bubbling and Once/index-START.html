@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Understanding JavaScript's Capture</title>
+  </head>
+  <body class="bod">
+    <div class="one">
+      <div class="two">
+        <div class="three"></div>
+      </div>
+    </div>
+
+    <style>
+      html {
+        box-sizing: border-box;
+      }
+
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
+
+      div {
+        width: 100%;
+        padding: 100px;
+      }
+
+      .one {
+        background: thistle;
+      }
+
+      .two {
+        background: mistyrose;
+      }
+
+      .three {
+        background: coral;
+      }
+    </style>
+
+    <button></button>
+    <script>
+      const divs = document.querySelectorAll("div");
+      const button = document.querySelector("button");
+
+      function logText(e) {
+        console.log(this.classList.value);
+        //logs innermost to outermost
+        // three
+        //  two
+        //  one
+
+        // adding this line results in only logging one element (3 if capture:false, 1 if capture: true)
+        // stopPropagation - stop bubbling
+        // e.stopPropagation();
+      }
+
+      // JS figures out what you clicked on by drilling top down to CAPTURE the event
+      // -then the events bubbles up, which triggers the event listeners
+      // -by adding a 3rd options parameter ({capture:true}), the event will be fired on the capture down
+      // this causes the log to be outer to innermost
+
+      divs.forEach(div =>
+        // div.addEventListener("click", logText)
+        // div.addEventListener("click", logText, { capture: true })
+
+        // once causes the event to UNBIND after it's triggered
+        div.addEventListener("click", logText, { capture: false, once: true })
+      );
+
+      // setup the button so it can only be clicked on once
+      button.addEventListener("click", () => console.log("hello"), {
+        capture: false,
+        once: true
+      });
+    </script>
+  </body>
+</html>
